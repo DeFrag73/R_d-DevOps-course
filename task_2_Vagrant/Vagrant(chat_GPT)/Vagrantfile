@@ -1,0 +1,89 @@
+Vagrant.configure("2") do |config|
+  # Функція для створення віртуальних машин зі спільними налаштуваннями
+  def setup_webserver(config, name, ip_address, shared_folder)
+    config.vm.define name do |vm|
+      vm.vm.box = "bento/ubuntu-24.04"
+      vm.vm.hostname = name
+
+      # Налаштування ресурсів для VirtualBox
+      vm.vm.provider "virtualbox" do |vb|
+        vb.memory = "2048"
+        vb.cpus = 1
+      end
+
+      # Спільна папка
+      vm.vm.synced_folder shared_folder, "/vagrant_shared"
+
+      # Публічна мережа зі статичним IP
+      vm.vm.network "public_network", ip: ip_address
+
+      # Провізіонінг за допомогою shell-команди
+      vm.vm.provision "shell", inline: <<-SHELL
+        sudo apt-get update
+        sudo apt-get install -y apache2
+      SHELL
+    end
+  end
+
+  # VM1 - Публічна мережа з динамічним IP
+  setup_webserver(config, "webserver-01", nil, "./shared_vm")
+
+  # VM2 - Приватний сервер зі статичним IP
+  config.vm.define "private_server_02" do |vm|
+    vm.vm.box = "bento/ubuntu-24.04"
+    vm.vm.hostname = "private-server-02"
+
+    # Налаштування ресурсів для VirtualBox
+    vm.vm.provider "virtualbox" do |vb|
+      vb.memory = "2048"
+      vb.cpus = 1
+    end
+
+    # Спільна папка
+    vm.vm.synced_folder "./shared_vm", "/vagrant_shared"
+
+    # Приватна мережа зі статичним IP
+    vm.vm.network "private_network", ip: "1.1.1.212"
+
+    # Провізіонінг за допомогою shell-команди
+    vm.vm.provision "shell", inline: <<-SHELL
+      sudo apt-get update
+      sudo apt-get install -y apache2
+    SHELL
+  end
+
+  # VM3 - Публічна мережа з мостовим підключенням та статичним IP
+  config.vm.define "webserver-03" do |vm|
+    vm.vm.box = "bento/ubuntu-24.04"
+    vm.vm.hostname = "webserver-03"
+
+    # Налаштування ресурсів для VirtualBox
+    vm.vm.provider "virtualbox" do |vb|
+      vb.memory = "2048"
+      vb.cpus = 1
+    end
+
+    # Спільна папка
+    vm.vm.synced_folder "./shared_vm", "/vagrant_shared_separately"
+
+    # Мережеве під'єднання з мостовим адаптером
+    vm.vm.network "public_network", bridge: "Realtek Gaming 2.5GbE Family Controller", ip: "1.1.1.213"
+
+    # Провізіонінг за допомогою shell-команди
+    vm.vm.provision "shell", inline: <<-SHELL
+      sudo apt-get update
+      sudo apt-get install -y apache2
+    SHELL
+  end
+
+  # Додаткові три сервери (копії VM1) без дублювання коду
+  ["webserver-04", "webserver-05", "webserver-06"].each_with_index do |name, index|
+    # Додаємо статичний IP для кожної машини
+    ip_address = "192.168.33.#{10 + index}"
+
+    # Спільна папка для кожної машини (можна зробити окрему для кожної)
+    shared_folder = "./shared_vm_#{index + 1}"
+
+    setup_webserver(config, name, ip_address, shared_folder)
+  end
+end
