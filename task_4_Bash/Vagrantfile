@@ -1,0 +1,24 @@
+# Vagrantfile для створення віртуальної машини з останньою версією Ubuntu
+Vagrant.configure("2") do |config|
+
+  # Вказуємо, яку операційну систему використовувати
+   config.vm.box = "ubuntu/focal64"
+
+
+  # Налаштовуємо базові параметри машини
+  config.vm.provider "virtualbox" do |vb|
+    vb.memory = "1024"  # Виділяємо 1024 МБ оперативної пам'яті
+    vb.cpus = 2         # Виділяємо 2 процесорні ядра
+  end
+
+  # Параметри мережі (налаштовуємо приватну мережу)
+  config.vm.network "private_network", type: "dhcp"
+
+  # Виконання команди після підняття машини
+  config.vm.provision "shell", inline: <<-SHELL
+    # Оновлюємо списки пакетів та систему
+    sudo apt-get update
+    sudo apt-get upgrade -y
+  SHELL
+
+end
