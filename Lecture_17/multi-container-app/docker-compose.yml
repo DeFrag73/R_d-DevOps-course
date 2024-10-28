@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  web:
+    build: ../Docker img nginx
+    volumes:
+      - ./web-content:/usr/share/nginx/html
+#    ports:
+#      - "8080-8090:80"
+    networks:
+      - appnet
+
+  db:
+    image: postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    expose:
+      - 5432
+    healthcheck:
+      test: [ "CMD", "pg_isready" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - appnet
+
+  cache:
+    image: redis
+    networks:
+      - appnet
+
+volumes:
+  db-data:
+  web-data:
+
+networks:
+  appnet:
