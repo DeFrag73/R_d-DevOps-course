@@ -1,7 +1,7 @@
 provider "aws" {
   region     = "us-east-1"
-  access_key = ""
-  secret_key = ""
+  access_key = "AKIA45Y2RKQOO7AN45KX"
+  secret_key = "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"
 }
 
 resource "aws_vpc" "k8s_vpc" {
@@ -100,12 +100,12 @@ resource "aws_security_group" "k8s_sg" {
 
 resource "aws_instance" "k8s_instance" {
   count         = 3
-  ami           = "ami-0852de09092f3a061"
+  ami           = "ami-005fc0f236362e99f"
   instance_type = "t3.medium"
   subnet_id     = aws_subnet.subnet_1.id
 
   associate_public_ip_address = true
-  key_name                    = "devops2"
+  key_name                    = "cources"
 
   security_groups = [aws_security_group.k8s_sg.id]
 
