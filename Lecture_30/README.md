@@ -240,6 +240,19 @@ output "private_instance_id" {
 ```hcl
 provider "aws" {
   region = var.region
+}provider "aws" {
+  region     = var.region
+}
+
+# Отримання останнього AMI ID для Amazon Linux 2
+data "aws_ami" "amazon_linux_2" {
+  most_recent = true
+  owners      = ["amazon"]
+
+  filter {
+    name   = "name"
+    values = ["amzn2-ami-hvm-2.0.*-x86_64-gp2"]
+  }
 }
 
 module "vpc" {
@@ -263,7 +276,7 @@ module "subnet" {
 module "ec2" {
   source = "./modules/ec2"
 
-  ami_id           = var.ami_id
+  ami_id           = data.aws_ami.amazon_linux_2.id
   instance_type    = var.instance_type
   public_subnet_id = module.subnet.public_subnet_id
   private_subnet_id = module.subnet.private_subnet_id
@@ -296,11 +309,6 @@ variable "private_subnet_cidr" {
 
 variable "az" {
   description = "Availability Zone"
-  type        = string
-}
-
-variable "ami_id" {
-  description = "AMI ID for the EC2 instance"
   type        = string
 }
 
@@ -347,7 +355,6 @@ vpc_cidr            = "10.0.0.0/16"
 public_subnet_cidr  = "10.0.1.0/24"
 private_subnet_cidr = "10.0.2.0/24"
 az                  = "us-east-1a"
-ami_id              = "ami-0e2c8caa4b6378d8c" 
 instance_type       = "t2.micro"
 env                 = "dev"
 ```
@@ -381,8 +388,7 @@ env                 = "dev"
 ### Проблеми з якими зіткнувся
 
    - не підходив AMI для регіону
-   - не підходили права доступу адміна виявляється я просто додав на якомусь етапі правила які забороняли дії з EC2 
-   - 
+   - не підходили права доступу адміна виявляється я просто додав на якомусь етапі правила які забороняли дії з EC2
 
 ### Висновок
 
