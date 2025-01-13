@@ -171,3 +171,8 @@ cython_debug/
 /Lectire_20/.terraform.lock.hcl
 /Lecture_22/Real_basics.pem
 /Lectire_20/terraform.tfstate
+/Lecture_30/terraform.tfstate
+/Lecture_30/.terraform.lock.hcl
+/Lecture_30/.terraform/
+/Lecture_30/terraform.tfvars
+/Lecture_30/terraform.tfstate.backup
