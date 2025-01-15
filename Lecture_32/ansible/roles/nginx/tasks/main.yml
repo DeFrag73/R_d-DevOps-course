@@ -1,0 +1,25 @@
+- name: Install Nginx
+  apt:
+    name: nginx
+    state: present
+
+#- name: Deploy website files
+#  copy:
+#    src: /mnt/c/Users/vladg/PycharmProjects/CampShop_06/01/2025/CampShop
+#    dest: /var/www/html/
+#    owner: www-data
+#    group: www-data
+#    mode: '0644'
+#    directory_mode: '0755'
+
+#- name: Update Nginx configuration
+#  template:
+#    src: nginx.conf.j2
+#    dest: /etc/nginx/sites-available/default
+#  notify: Restart Nginx
+
+- name: Start Nginx
+  service:
+    name: nginx
+    state: started
+    enabled: yes

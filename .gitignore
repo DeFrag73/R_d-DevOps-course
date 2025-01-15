@@ -176,3 +176,8 @@ cython_debug/
 /Lecture_30/.terraform/
 /Lecture_30/terraform.tfvars
 /Lecture_30/terraform.tfstate.backup
+/Lecture_30/.terraform.tfstate.lock.info
+/Lecture_32/cources.pem
+/Lecture_30/cources.pem
+/Lecture_32/ansible/cources.pem
+/Lecture_32/ansible/debug.py

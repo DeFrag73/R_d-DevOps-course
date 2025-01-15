@@ -17,3 +17,7 @@ output "public_instance_id" {
 output "private_instance_id" {
   value = module.ec2.private_instance_id
 }
+
+output "security_group_id" {
+  value = module.security_group.security_group_id
+}

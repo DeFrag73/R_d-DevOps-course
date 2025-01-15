@@ -1,0 +1,18 @@
+- hosts: tag_dev_public_instance
+  become: yes
+  gather_facts: yes
+  roles:
+    - baseline
+    - firewall
+
+- hosts: tag_dev_public_instance
+  become: yes
+  gather_facts: yes
+  roles:
+    - nginx
+
+- hosts: tag_dev_private_instance
+  become: yes
+  gather_facts: yes
+  roles:
+    - mongodb

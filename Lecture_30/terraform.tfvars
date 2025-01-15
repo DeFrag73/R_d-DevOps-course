@@ -5,3 +5,5 @@ private_subnet_cidr = "10.0.2.0/24"
 az                  = "us-east-1a"
 instance_type       = "t2.micro"
 env                 = "dev"
+key_name            = "cources"
+
