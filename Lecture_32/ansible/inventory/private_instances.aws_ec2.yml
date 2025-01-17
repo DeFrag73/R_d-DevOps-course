@@ -1,0 +1,18 @@
+plugin: amazon.aws.aws_ec2
+regions:
+  - us-east-1
+filters:
+  tag:Type: private
+keyed_groups:
+  - key: tags.Name
+    prefix: tag
+  - key: tags.Type
+    prefix: type
+hostnames:
+  - tag:Name
+compose:
+  ansible_host: private_ip_address
+  ansible_user: ubuntu
+  ansible_ssh_private_key_file: "~/.ssh/cources.pem"  # Повний шлях до ключа
+  ansible_port: 22
+  ansible_ssh_common_args: "-F ~/.ssh/config"  # Використовувати SSH-конфіг

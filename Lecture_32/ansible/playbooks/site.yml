@@ -1,0 +1,18 @@
+- hosts: all
+  become: yes
+  gather_facts: yes
+  roles:
+    - baseline
+    - firewall
+
+- hosts: type_public  # Використовуємо групу type_public
+  become: yes
+  gather_facts: yes
+  roles:
+    - nginx
+
+- hosts: type_private  # Використовуємо групу type_private
+  become: yes
+  gather_facts: yes
+  roles:
+    - mongodb

@@ -1,0 +1,14 @@
+- name: Ensure SSH keys are configured
+  authorized_key:
+    user: ubuntu
+    key: "{{ ssh_public_key }}"
+
+- name: Install basic packages
+  apt:
+    name:
+      - vim
+      - git
+      - mc
+      - ufw
+    state: present
+    update_cache: yes

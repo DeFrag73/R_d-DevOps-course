@@ -1,0 +1,27 @@
+- name: Allow SSH
+  ufw:
+    rule: allow
+    port: 22
+    proto: tcp
+
+- name: Allow MongoDB ports
+  ufw:
+    rule: allow
+    port: "{{ item }}"
+    proto: tcp
+  loop:
+    - 27017
+    - 27018
+
+- name: Allow HTTP and HTTP Alternate ports
+  ufw:
+    rule: allow
+    port: "{{ item }}"
+    proto: tcp
+  loop:
+    - 80
+    - 8080
+
+- name: Enable UFW
+  ufw:
+    state: enabled
