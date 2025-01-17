@@ -18,6 +18,14 @@ output "private_instance_id" {
   value = module.ec2.private_instance_id
 }
 
-output "security_group_id" {
-  value = module.security_group.security_group_id
+output "public_sg_id" {
+  value = module.ec2.public_sg_id
+}
+
+output "private_sg_id" {
+  value = module.ec2.private_sg_id
+}
+
+output "bastion_sg_id" {
+  value = module.ec2.bastion_sg_id
 }

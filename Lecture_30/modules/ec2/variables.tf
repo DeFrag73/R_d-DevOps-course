@@ -43,7 +43,73 @@ variable "private_subnet_cidr" {
   type        = string
 }
 
-variable "security_group_id" {
-  description = "SG - for all servers"
-  type        = string
+# variable "security_group_id" {
+#   description = "SG - for all servers"
+#   type        = string
+# }
+
+variable "public_ingress_rules" {
+  description = "List of ingress rules for the public instance"
+  type = list(object({
+    from_port   = number
+    to_port     = number
+    protocol    = string
+    cidr_blocks = list(string)
+  }))
+  default = []
+}
+
+variable "public_egress_rules" {
+  description = "List of egress rules for the public instance"
+  type = list(object({
+    from_port   = number
+    to_port     = number
+    protocol    = string
+    cidr_blocks = list(string)
+  }))
+  default = []
+}
+
+variable "private_ingress_rules" {
+  description = "List of ingress rules for the private instance"
+  type = list(object({
+    from_port   = number
+    to_port     = number
+    protocol    = string
+    cidr_blocks = list(string)
+  }))
+  default = []
+}
+
+variable "private_egress_rules" {
+  description = "List of egress rules for the private instance"
+  type = list(object({
+    from_port   = number
+    to_port     = number
+    protocol    = string
+    cidr_blocks = list(string)
+  }))
+  default = []
+}
+
+variable "bastion_ingress_rules" {
+  description = "List of ingress rules for the bastion instance"
+  type = list(object({
+    from_port   = number
+    to_port     = number
+    protocol    = string
+    cidr_blocks = list(string)
+  }))
+  default = []
+}
+
+variable "bastion_egress_rules" {
+  description = "List of egress rules for the bastion instance"
+  type = list(object({
+    from_port   = number
+    to_port     = number
+    protocol    = string
+    cidr_blocks = list(string)
+  }))
+  default = []
 }

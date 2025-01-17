@@ -1,17 +1,17 @@
-- hosts: tag_dev_public_instance
+- hosts: all
   become: yes
   gather_facts: yes
   roles:
     - baseline
     - firewall
 
-- hosts: tag_dev_public_instance
+- hosts: type_public  # Використовуємо групу type_public
   become: yes
   gather_facts: yes
   roles:
     - nginx
 
-- hosts: tag_dev_private_instance
+- hosts: type_private  # Використовуємо групу type_private
   become: yes
   gather_facts: yes
   roles:

@@ -46,13 +46,13 @@ module "route_tables" {
   env              = var.env
 }
 
-module "security_group" {
-  source = "./modules/security_group"
-
-  vpc_id           = module.vpc.vpc_id
-  env              = var.env
-  name             = "${var.env}-sg"
-}
+# module "security_group" {
+#   source = "./modules/security_group"
+#
+#   vpc_id           = module.vpc.vpc_id
+#   env              = var.env
+#   name             = "${var.env}-sg"
+# }
 
 module "ec2" {
   source = "./modules/ec2"
@@ -62,10 +62,106 @@ module "ec2" {
   instance_type       = var.instance_type
   public_subnet_id    = module.subnet.public_subnet_id
   private_subnet_id   = module.subnet.private_subnet_id
-  security_group_id   = module.security_group.security_group_id
   key_name            = var.key_name
   env                 = var.env
   private_subnet_cidr = var.private_subnet_cidr
   public_subnet_cidr  = var.public_subnet_cidr
+
+  public_ingress_rules = [
+    {
+      from_port   = 22
+      to_port     = 22
+      protocol    = "tcp"
+      cidr_blocks = ["0.0.0.0/0"]
+    },
+    {
+      from_port   = 80
+      to_port     = 80
+      protocol    = "tcp"
+      cidr_blocks = ["0.0.0.0/0"]
+    },
+    {
+      from_port   = 8080
+      to_port     = 8080
+      protocol    = "tcp"
+      cidr_blocks = ["0.0.0.0/0"]
+    },
+    {
+      from_port = -1
+      to_port   = -1
+      protocol  = "icmp"
+      cidr_blocks = ["0.0.0.0/0"]
+    }
+  ]
+
+  public_egress_rules = [
+    {
+      from_port   = 0
+      to_port     = 0
+      protocol    = "-1"
+      cidr_blocks = ["0.0.0.0/0"]
+    }
+  ]
+
+  private_ingress_rules = [
+    {
+      from_port   = 22
+      to_port     = 22
+      protocol    = "tcp"
+      cidr_blocks = ["0.0.0.0/0"]
+    },
+    {
+      from_port   = 27017
+      to_port     = 27017
+      protocol    = "tcp"
+      cidr_blocks = ["0.0.0.0/0"]
+    },
+    {
+      from_port   = 27018
+      to_port     = 27018
+      protocol    = "tcp"
+      cidr_blocks = ["0.0.0.0/0"]
+    },
+    {
+      from_port = -1
+      to_port   = -1
+      protocol  = "icmp"
+      cidr_blocks = ["0.0.0.0/0"]
+    }
+  ]
+
+  private_egress_rules = [
+    {
+      from_port   = 0
+      to_port     = 0
+      protocol    = "-1"
+      cidr_blocks = ["0.0.0.0/0"]
+    }
+  ]
+
+  bastion_ingress_rules = [
+    {
+      from_port   = 22
+      to_port     = 22
+      protocol    = "tcp"
+      cidr_blocks = ["0.0.0.0/0"]
+    },
+    {
+      from_port = -1
+      to_port   = -1
+      protocol  = "icmp"
+      cidr_blocks = ["0.0.0.0/0"]
+    }
+  ]
+
+  bastion_egress_rules = [
+    {
+      from_port   = 0
+      to_port     = 0
+      protocol    = "-1"
+      cidr_blocks = ["0.0.0.0/0"]
+    }
+  ]
 }
+
 
