@@ -1,0 +1,5 @@
+- name: Deploy application
+  hosts: stack_nodejs
+  become: true
+  roles:
+    - roles/nodejs

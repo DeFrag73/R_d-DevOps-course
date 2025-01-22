@@ -1,0 +1,3 @@
+app_git_repo: git@gitlab.com:keleberda16/lecture33.git
+app_dest: /var/www/app
+user: ubuntu
