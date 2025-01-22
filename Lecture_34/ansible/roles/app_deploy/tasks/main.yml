@@ -1,0 +1,31 @@
+- name: Deploy private SSH key
+  copy:
+    content: "{{ private_key }}"
+    dest: "/home/{{ ansible_user }}/.ssh/id_rsa"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: '0600'
+
+- name: Clone application repository
+  git:
+    repo: "{{ app_git_repo }}"
+    dest: "{{ app_dest }}"
+    version: main
+    key_file: "/home/{{ ansible_user }}/.ssh/id_rsa"
+
+- name: Install, build, and start the application
+  block:
+    - name: Install dependencies
+      npm:
+        path: "{{ app_dest }}"
+        state: present
+
+    - name: Build the application
+      shell: npm run build
+      args:
+        chdir: "{{ app_dest }}"
+
+    - name: Start the application
+      shell: npm start
+      args:
+        chdir: "{{ app_dest }}"
