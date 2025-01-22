@@ -1,0 +1,29 @@
+---
+- name: Update apt cache
+  apt:
+    update_cache: yes
+
+- name: Install OpenJDK 17
+  apt:
+    name: openjdk-17-jdk
+    state: present
+    update_cache: yes
+
+- name: Install Node.js and npm from Ubuntu repositories
+  apt:
+    name: ["nodejs", "npm"]
+    state: present
+
+- name: Verify Node.js installation
+  command: "node --version"
+  register: node_version
+
+- debug:
+    msg: "Node.js version installed: {{ node_version.stdout }}"
+
+- name: Verify npm installation
+  command: "npm --version"
+  register: npm_version
+
+- debug:
+    msg: "npm version installed: {{ npm_version.stdout }}"
